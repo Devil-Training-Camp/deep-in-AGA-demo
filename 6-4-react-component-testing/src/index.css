@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-gray-950 text-gray-100;
+  }
+}
+
+.token-keyword { color: #c678dd; }
+.token-type    { color: #e5c07b; }
+.token-string  { color: #98c379; }
+.token-comment { color: #5c6370; font-style: italic; }
+.token-prop    { color: #61afef; }
+.token-punct   { color: #abb2bf; }

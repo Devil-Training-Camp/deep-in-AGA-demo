@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.commit-node {
+  transition: all 0.3s ease;
+}
+
+.commit-node:hover {
+  transform: scale(1.1);
+}

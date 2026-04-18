@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(node_modules/**)",
+      "Read(dist/**)",
+      "Read(.git/**)",
+      "Read(.env.secret)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/commit-convention.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
