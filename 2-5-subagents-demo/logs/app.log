@@ -1,0 +1,95 @@
+2026-04-24 09:00:01 [INFO]  Server started on port 3000
+2026-04-24 09:00:02 [INFO]  Connected to database: mongodb://localhost/app
+2026-04-24 09:00:03 [INFO]  Redis cache connected: localhost:6379
+2026-04-24 09:00:15 [INFO]  GET  /api/health 200 3ms
+2026-04-24 09:01:02 [INFO]  GET  /api/users 200 42ms
+2026-04-24 09:01:45 [INFO]  POST /api/users 201 88ms
+2026-04-24 09:02:10 [INFO]  GET  /api/users/123 200 19ms
+2026-04-24 09:03:33 [INFO]  GET  /api/users 200 38ms
+2026-04-24 09:04:01 [WARN]  Slow query detected: users.find() took 430ms
+2026-04-24 09:04:55 [INFO]  DELETE /api/users/456 204 22ms
+2026-04-24 09:05:12 [INFO]  GET  /api/users 200 45ms
+2026-04-24 09:06:30 [INFO]  POST /api/auth/login 200 112ms user=alice@example.com
+2026-04-24 09:07:01 [INFO]  GET  /api/users 200 41ms
+2026-04-24 09:08:44 [INFO]  PUT  /api/users/789 200 67ms
+2026-04-24 09:09:20 [INFO]  GET  /api/users/789 200 18ms
+2026-04-24 09:10:05 [WARN]  Memory usage at 72%: 1.44GB / 2GB
+2026-04-24 09:10:33 [INFO]  GET  /api/users 200 44ms
+2026-04-24 09:11:02 [INFO]  POST /api/auth/login 200 98ms user=bob@example.com
+2026-04-24 09:11:55 [INFO]  GET  /api/users 200 40ms
+2026-04-24 09:12:30 [INFO]  GET  /api/reports 200 234ms
+2026-04-24 09:13:01 [INFO]  GET  /api/users 200 39ms
+2026-04-24 09:14:18 [INFO]  POST /api/users 201 91ms
+2026-04-24 09:15:00 [INFO]  GET  /api/health 200 2ms
+2026-04-24 09:16:22 [WARN]  Slow query detected: users.aggregate() took 612ms
+2026-04-24 09:17:10 [INFO]  GET  /api/users 200 43ms
+2026-04-24 09:18:45 [INFO]  DELETE /api/users/101 204 20ms
+2026-04-24 09:19:30 [INFO]  GET  /api/users 200 41ms
+2026-04-24 09:20:01 [INFO]  POST /api/auth/login 401 45ms user=hacker@evil.com
+2026-04-24 09:20:03 [ERROR] Authentication failed: invalid token for user=hacker@evil.com ip=203.0.113.42
+2026-04-24 09:20:05 [INFO]  POST /api/auth/login 401 44ms user=hacker@evil.com
+2026-04-24 09:20:05 [ERROR] Authentication failed: invalid token for user=hacker@evil.com ip=203.0.113.42
+2026-04-24 09:20:06 [INFO]  POST /api/auth/login 401 43ms user=hacker@evil.com
+2026-04-24 09:20:06 [ERROR] Authentication failed: invalid token for user=hacker@evil.com ip=203.0.113.42
+2026-04-24 09:20:07 [WARN]  Brute-force detected: 3 failed logins from ip=203.0.113.42
+2026-04-24 09:20:07 [INFO]  Rate limit applied: ip=203.0.113.42 blocked for 60s
+2026-04-24 09:21:00 [INFO]  GET  /api/users 200 42ms
+2026-04-24 09:22:15 [INFO]  GET  /api/reports 200 198ms
+2026-04-24 09:23:40 [WARN]  Memory usage at 78%: 1.56GB / 2GB
+2026-04-24 09:24:01 [INFO]  GET  /api/users 200 44ms
+2026-04-24 09:25:30 [INFO]  PUT  /api/users/202 200 72ms
+2026-04-24 09:26:10 [INFO]  GET  /api/users 200 40ms
+2026-04-24 09:27:00 [INFO]  GET  /api/health 200 3ms
+2026-04-24 09:28:45 [INFO]  POST /api/auth/login 200 105ms user=carol@example.com
+2026-04-24 09:29:20 [INFO]  GET  /api/users 200 43ms
+2026-04-24 09:30:01 [WARN]  Slow query detected: reports.aggregate() took 890ms
+2026-04-24 09:31:15 [INFO]  GET  /api/reports 200 901ms
+2026-04-24 09:32:00 [INFO]  GET  /api/users 200 39ms
+2026-04-24 09:33:22 [INFO]  DELETE /api/users/303 204 18ms
+2026-04-24 09:34:01 [INFO]  GET  /api/users 200 41ms
+2026-04-24 09:35:00 [WARN]  Memory usage at 83%: 1.66GB / 2GB
+2026-04-24 09:36:30 [INFO]  GET  /api/users 200 44ms
+2026-04-24 09:37:10 [INFO]  POST /api/users 201 87ms
+2026-04-24 09:38:45 [ERROR] Unhandled exception in /api/reports: TypeError: Cannot read property 'data' of undefined
+2026-04-24 09:38:45 [ERROR]   at ReportService.generate (src/services/ReportService.ts:142:18)
+2026-04-24 09:38:45 [ERROR]   at async ReportController.get (src/controllers/ReportController.ts:67:5)
+2026-04-24 09:38:46 [INFO]  GET  /api/reports 500 12ms
+2026-04-24 09:39:00 [ERROR] Unhandled exception in /api/reports: TypeError: Cannot read property 'data' of undefined
+2026-04-24 09:39:00 [ERROR]   at ReportService.generate (src/services/ReportService.ts:142:18)
+2026-04-24 09:39:00 [ERROR]   at async ReportController.get (src/controllers/ReportController.ts:67:5)
+2026-04-24 09:39:01 [INFO]  GET  /api/reports 500 11ms
+2026-04-24 09:39:20 [ERROR] Unhandled exception in /api/reports: TypeError: Cannot read property 'data' of undefined
+2026-04-24 09:39:20 [ERROR]   at ReportService.generate (src/services/ReportService.ts:142:18)
+2026-04-24 09:39:20 [ERROR]   at async ReportController.get (src/controllers/ReportController.ts:67:5)
+2026-04-24 09:39:20 [INFO]  GET  /api/reports 500 10ms
+2026-04-24 09:40:00 [WARN]  Memory usage at 89%: 1.78GB / 2GB
+2026-04-24 09:40:15 [ERROR] MongoDB connection timeout after 5000ms, retrying... (attempt 1/3)
+2026-04-24 09:40:20 [ERROR] MongoDB connection timeout after 5000ms, retrying... (attempt 2/3)
+2026-04-24 09:40:25 [ERROR] MongoDB connection timeout after 5000ms, retrying... (attempt 3/3)
+2026-04-24 09:40:25 [ERROR] Failed to reconnect to MongoDB. Some requests may fail.
+2026-04-24 09:40:30 [INFO]  GET  /api/users 503 5ms
+2026-04-24 09:40:32 [INFO]  GET  /api/users 503 4ms
+2026-04-24 09:40:35 [INFO]  GET  /api/users 503 5ms
+2026-04-24 09:41:00 [INFO]  MongoDB reconnected successfully
+2026-04-24 09:41:05 [INFO]  GET  /api/users 200 67ms
+2026-04-24 09:41:30 [INFO]  GET  /api/users 200 48ms
+2026-04-24 09:42:00 [INFO]  GET  /api/health 200 3ms
+2026-04-24 09:43:15 [INFO]  POST /api/auth/login 200 108ms user=dave@example.com
+2026-04-24 09:44:00 [WARN]  Memory usage at 91%: 1.82GB / 2GB
+2026-04-24 09:44:30 [INFO]  GC triggered: freed 320MB, memory now at 74%: 1.48GB / 2GB
+2026-04-24 09:45:00 [INFO]  GET  /api/users 200 40ms
+2026-04-24 09:46:10 [INFO]  GET  /api/reports 200 210ms
+2026-04-24 09:47:00 [INFO]  GET  /api/users 200 42ms
+2026-04-24 09:48:33 [INFO]  PUT  /api/users/404 200 69ms
+2026-04-24 09:49:00 [INFO]  GET  /api/users 200 41ms
+2026-04-24 09:50:00 [INFO]  GET  /api/health 200 2ms
+2026-04-24 09:51:15 [INFO]  GET  /api/users 200 43ms
+2026-04-24 09:52:30 [WARN]  Slow query detected: users.find() took 480ms
+2026-04-24 09:53:00 [INFO]  GET  /api/users 200 45ms
+2026-04-24 09:54:22 [INFO]  POST /api/users 201 90ms
+2026-04-24 09:55:10 [INFO]  DELETE /api/users/505 204 21ms
+2026-04-24 09:56:00 [INFO]  GET  /api/users 200 40ms
+2026-04-24 09:57:15 [INFO]  GET  /api/reports 200 225ms
+2026-04-24 09:58:30 [INFO]  GET  /api/users 200 44ms
+2026-04-24 09:59:00 [INFO]  GET  /api/users 200 42ms
+2026-04-24 10:00:00 [INFO]  GET  /api/health 200 3ms
