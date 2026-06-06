@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react'
 
 // 这个组件故意有若干问题，用于演示 code-reviewer 能发现什么
-// 问题：any 类型泛滥、缺少 Props 接口、useEffect 依赖不完整、组件职责过多
+// 问题：缺少 Props 接口、useEffect 依赖不完整、组件职责过多
+
+interface User {
+  id: number
+  name: string
+  email: string
+  createdAt?: string
+}
+
+interface UserUpdateData {
+  name?: string
+  email?: string
+}
 
 export function UserList() {
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<any>(null)
+  const [error, setError] = useState<Error | null>(null)
   const [filter, setFilter] = useState('')
   const [page, setPage] = useState(1)
   const [pageSize] = useState(10)
