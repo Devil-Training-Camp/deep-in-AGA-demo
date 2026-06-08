@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "extraKnownMarketplaces": {
+    "local-demo-market": {
+      "source": {
+        "source": "directory",
+        "path": "./local-marketplace"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "demo-plugin@local-demo-market": true
+  }
+}

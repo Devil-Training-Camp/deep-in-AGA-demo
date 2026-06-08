@@ -1,0 +1,5 @@
+{
+  "name": "demo-plugin",
+  "version": "1.0.0",
+  "description": "课堂演示插件：展示 Plugin 系统的基本结构"
+}
