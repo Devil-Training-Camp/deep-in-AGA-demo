@@ -1,5 +1,29 @@
 {
-  "name": "demo-plugin",
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "frontend-review",
+  "displayName": "Frontend Review",
   "version": "1.0.0",
-  "description": "课堂演示用插件：展示 Plugin 系统的基本结构"
+  "description": "课堂演示插件:把 Skills / Subagents / MCP / Hooks / LSP 五大能力围绕「前端代码审查」串成一个完整工作流",
+  "author": {
+    "name": "Tecvan",
+    "url": "https://github.com/Tecvan-fe"
+  },
+  "homepage": "https://github.com/Tecvan-fe/deep-in-AGA",
+  "repository": "https://github.com/Tecvan-fe/deep-in-AGA",
+  "license": "MIT",
+  "keywords": ["frontend", "code-review", "react", "typescript", "demo"],
+  "lspServers": {
+    "typescript": {
+      "command": "typescript-language-server",
+      "args": ["--stdio"],
+      "extensionToLanguage": {
+        ".ts": "typescript",
+        ".tsx": "typescriptreact",
+        ".js": "javascript",
+        ".jsx": "javascriptreact"
+      },
+      "startupTimeout": 30000,
+      "maxRestarts": 5
+    }
+  }
 }

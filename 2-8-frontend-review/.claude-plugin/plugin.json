@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "frontend-review",
+  "displayName": "Frontend Review",
+  "version": "1.0.0",
+  "description": "前端代码审查插件:一条 /frontend-review:check 命令依次调度 typescript-analyzer 与 accessibility-checker 两个 subagent,汇总类型与无障碍问题。",
+  "author": {
+    "name": "Tecvan",
+    "url": "https://github.com/Tecvan-fe"
+  },
+  "homepage": "https://github.com/Tecvan-fe/deep-in-AGA",
+  "repository": "https://github.com/Tecvan-fe/deep-in-AGA",
+  "license": "MIT",
+  "keywords": ["frontend", "code-review", "react", "typescript", "accessibility", "wcag"]
+}
