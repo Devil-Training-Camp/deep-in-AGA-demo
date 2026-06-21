@@ -1,0 +1,10 @@
+{
+  "name": "@demos/3-1-article-to-video",
+  "version": "0.1.0",
+  "private": true,
+  "description": "第 3 章贯穿案例：文章转视频 AI Pipeline。3.1 设计阶段从这里开始,后续 3.2~3.6 在同一工程内逐步落地。",
+  "type": "module",
+  "scripts": {
+    "//": "脚本在 3.3 编码阶段补全。设计阶段(3.1)只产出 docs/,无需运行命令。"
+  }
+}
