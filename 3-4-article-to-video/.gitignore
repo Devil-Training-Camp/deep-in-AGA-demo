@@ -1,0 +1,23 @@
+# 依赖
+node_modules/
+
+# 本地环境变量（含 API Key，不提交）
+.env
+.env.local
+.env.*.local
+
+# 产物目录（pipeline 运行后生成）
+output/
+out-real/
+# 其它自定义 --output 目录请按需在此补充
+
+# 输入文章：本地草稿/测试文章不提交，只保留文档引用的官方样例
+input/*
+!input/react-compiler.md
+
+# TypeScript 编译产物
+dist/
+*.js.map
+
+# macOS
+.DS_Store

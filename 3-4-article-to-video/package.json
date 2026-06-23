@@ -1,0 +1,56 @@
+{
+  "name": "@demos/3-3-article-to-video",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "把一篇技术文章(Markdown)转成 ≤5 分钟可发布视频的命令行 pipeline",
+  "engines": {
+    "node": ">=22.16.0"
+  },
+  "bin": {
+    "article-to-video": "src/cli.ts"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts --help",
+    "start": "tsx src/cli.ts",
+    "pipeline": "tsx src/cli.ts run",
+    "studio": "remotion studio remotion/index.ts",
+    "clean": "rm -rf output",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
+    "@elevenlabs/elevenlabs-js": "^2.6.0",
+    "@remotion/bundler": "4.0.448",
+    "@remotion/renderer": "4.0.448",
+    "dotenv": "^16.4.0",
+    "ffmpeg-static": "^5.2.0",
+    "mdast-util-to-string": "^4.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-shiki": "^0.5.0",
+    "remotion": "4.0.448",
+    "remark-gfm": "^4.0.0",
+    "remark-parse": "^11.0.0",
+    "shiki": "^1.22.0",
+    "unified": "^11.0.0",
+    "unist-util-visit": "^5.0.0",
+    "zod": "^3.23.0",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@remotion/cli": "4.0.448",
+    "@types/mdast": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0"
+  }
+}
