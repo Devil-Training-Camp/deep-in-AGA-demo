@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "prd": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/prd/SKILL.md",
+      "computedHash": "1f3e1f005fc40fda85d250ae906c8ee4f7e8e833e23adfeca6542c19609fd7cd"
+    },
+    "requirement-review": {
+      "source": "dauquangthanh/hanoi-rainbow",
+      "sourceType": "github",
+      "skillPath": "skills/requirement-review/SKILL.md",
+      "computedHash": "8aa84fc8320e46c402b98223307d21ff0bd9e4d0f40b4de63e22086ff12c658e"
+    }
+  }
+}
