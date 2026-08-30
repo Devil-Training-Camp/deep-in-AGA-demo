@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "postgres-semantic-search": {
+      "source": "laguagu/claude-code-nextjs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/postgres-semantic-search/SKILL.md",
+      "computedHash": "6e93e94d8e7485fc9f18fdf1b3127b06c7a1051c406a2a803d20930bb475ab6d"
+    },
+    "rag-blueprint": {
+      "source": "nvidia/skills",
+      "sourceType": "github",
+      "skillPath": "skills/rag-blueprint/SKILL.md",
+      "computedHash": "5c057a857193fdd137a8f040cfb95cf033c74fbc27eb5346c5255a5b34e1459b"
+    }
+  }
+}

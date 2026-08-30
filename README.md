@@ -13,6 +13,8 @@
 | `2-3-context-demo` | 第二章：上下文管理 Demo |
 | `2-3-interface-demo` | 第二章：接口设计 Demo |
 | `3-0-article-to-video` | 第三章：文章转视频 Pipeline |
+| `4-1-requirements-analysis` | 第四章：需求分析（/prd + requirement-review 驱动，产出 requirements.md） |
+| `4-2-tech-research` | 第四章：技术调研（Perplexity MCP + Claude 带约束推导，产出 tech-selection.md） |
 | `6-4-react-component-testing` | 第六章：React 组件测试 |
 
 ## 技术栈
