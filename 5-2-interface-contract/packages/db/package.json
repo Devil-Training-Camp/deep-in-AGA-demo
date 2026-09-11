@@ -1,0 +1,30 @@
+{
+  "name": "@kb/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "migrations"],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "migrate": "pnpm build && node --env-file-if-exists=../../.env.local dist/migrate.js",
+    "healthcheck": "pnpm build && node --env-file-if-exists=../../.env.local dist/healthcheck.js",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@kb/shared": "workspace:*",
+    "pg": "^8.23.0",
+    "pgvector": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.6"
+  }
+}
