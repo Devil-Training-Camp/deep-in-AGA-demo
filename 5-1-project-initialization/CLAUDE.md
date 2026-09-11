@@ -14,7 +14,7 @@ AI 知识问答系统：用户上传文档、分知识库管理，基于文档�
 - **文档解析**：PDF 用 `pdf-parse`(MIT)，`.docx` 用 `mammoth`(BSD)，TXT 用 Node 内置 `fs`。（选型文档的 PyMuPDF/AGPL 方案已因 Python→Node 切换作废，见 `architecture-design.md:29`。）
 - **LLM / Embedding**：均走云 API，不自托管。具体厂商未定，业务代码只依赖 `lib/llm/` 的抽象接口，不直接引任何厂商 SDK（`architecture-design.md:414`）。
 - **ORM**：Prisma 不支持 `vector` 类型——`embedding` 声明为 `Unsupported("vector(1024)")`，向量插入与 `<=>` 检索走 `$queryRaw` + `pgvector` npm 包（`architecture-design.md:236`）。
-- **认证**：邮箱+密码自建账号，密码 `bcrypt`/`argon2` 哈希；登录态用无状态 JWT，`role`(`user`/`admin`) 放进 JWT claim。
+- **认证**:**Supabase Auth** 托管身份(2026-09-09 由自建 JWT 变更,见 `architecture-design.md` 决策 5)。邮箱+密码登录,session 存 httpOnly cookie,服务端用 `@supabase/ssr` 的 `createServerClient` 读取,授权决策走 `supabase.auth.getUser()`(向 Auth 服务端校验,非信任 `getSession()`)。`role`(`user`/`admin`)由服务端从 `users` 表查得,**不信任客户端传入的角色**。Supabase URL/publishable key 走 env;**service_role key 属机密,只存服务端 env**。
 
 ## 二、模块边界
 
@@ -41,7 +41,7 @@ AI 知识问答系统：用户上传文档、分知识库管理，基于文档�
 ### 安全（P0，上线阻断项）
 
 - **三条相反的授权规则不能混淆**：知识库不拼 user 过滤（全员平权）／历史强制拼 `user_id`／admin 路径刻意不拼。这是越权风险最密集处，数据访问层统一处理，不在业务代码里手写。
-- SSE (`/api/chat`)：连接握手时验证 JWT；请求体 `sessionId` 必须校验归属当前 `user_id`，禁止读他人上下文。
+- SSE (`/api/chat`)：连接握手时用 `supabase.auth.getUser()` 校验 session;请求体 `sessionId` 必须校验归属当前 `user_id`，禁止读他人上下文。
 - `/api/conversations/:id/messages` 必须校验 `:id` 归属当前用户（防 IDOR）。
 - `/api/admin/*` 校验 `role === 'admin'`，**不得用 `role !== 'user'` 这类反向逻辑**。
 - 认证入口限流：`login` 按 IP/账号限失败次数；`register` 按拍板的开放度约束，不得默认任意邮箱可注册。
