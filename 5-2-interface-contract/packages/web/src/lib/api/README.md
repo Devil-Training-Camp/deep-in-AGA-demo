@@ -6,8 +6,18 @@
 
 - `client.ts` — `createApiClient(options)`:带请求/响应拦截器的 axios 实例。
 - `errors.ts` — 错误类型:`ApiError` 基类 + `NetworkError` / `AuthError` / `BusinessError`。
+- `mutator.ts` — orval 的自定义 mutator:`customInstance`。生成的请求函数经它复用上面那份 axios 实例,不另起裸 axios,鉴权/重试/错误归一化全部继承。
+- `generated/` — **由 `../../../../shared/src/api/schema.yaml` 经 orval 生成**(`pnpm --filter @kb/web gen:api`),按 tag 分目录的请求函数(auth/knowledge-bases/documents/conversations/admin)。**不要手改**;改契约要回 schema.yaml 再重跑。
 - `index.ts` — 对外导出。
 - `__tests__/` — Vitest 单元测试(用自定义 adapter,不发真实网络)。
+
+## 生成层(orval)
+
+请求函数由 `orval.config.ts` 从 OpenAPI schema 生成,与手写的基础层职责分离:`client.ts` 管「怎么发」,`generated/` 管「调哪个、传什么类型」。三条约定:
+
+- **走 mutator**:`httpClient: axios` + `override.mutator` 指向 `mutator.ts` 的 `customInstance`,生成函数因此复用同一实例、同一套拦截器,不重复实现鉴权与错误归一化。
+- **排除 `POST /api/chat`**:配置按 `tags: [chat]` 排除,SseEvent 等 schema 也不生成——SSE 走独立流式客户端(见下「边界」),其类型的单一事实源是 `@kb/shared` 的 `streaming.ts`。
+- **baseURL 从环境变量读**:`mutator.ts` 取 `NEXT_PUBLIC_API_BASE_URL`(API 前缀非机密,可暴露给浏览器),缺省回落基础层默认的 `/api`。密钥类值绝不走 `NEXT_PUBLIC_`。
 
 ## 设计要点(严格对齐文档,未引入文档外约定)
 

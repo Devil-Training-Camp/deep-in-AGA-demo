@@ -1,11 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  ApiError,
-  AuthError,
-  BusinessError,
-  NetworkError,
-  isErrorEnvelope,
-} from "../errors.js";
+import { ApiError, isApiError, isErrorEnvelope, NETWORK_ERROR_CODE } from "../errors.js";
 
 describe("isErrorEnvelope", () => {
   it("识别符合契约的 { error: { code, message } }", () => {
@@ -21,40 +15,43 @@ describe("isErrorEnvelope", () => {
   });
 });
 
-describe("错误类型层级", () => {
-  it("三类错误都是 ApiError,kind 可区分", () => {
-    const net = new NetworkError("net");
-    const auth = new AuthError("auth", 401);
-    const biz = new BusinessError("CODE", "biz", 400);
-
-    for (const e of [net, auth, biz]) {
-      expect(e).toBeInstanceOf(ApiError);
-      expect(e).toBeInstanceOf(Error);
-    }
-    expect(net.kind).toBe("network");
-    expect(auth.kind).toBe("auth");
-    expect(biz.kind).toBe("business");
+describe("ApiError", () => {
+  it("是 Error 子类,携带 code / message / statusCode / details", () => {
+    const err = new ApiError({
+      code: "INVALID_NAME",
+      message: "名称不合法",
+      statusCode: 422,
+      details: { field: "name" },
+    });
+    expect(err).toBeInstanceOf(Error);
+    expect(err.name).toBe("ApiError");
+    expect(err.code).toBe("INVALID_NAME");
+    expect(err.message).toBe("名称不合法");
+    expect(err.statusCode).toBe(422);
+    expect(err.details).toEqual({ field: "name" });
   });
 
-  it("BusinessError 携带 code,AuthError 携带状态码", () => {
-    const biz = new BusinessError("INVALID_NAME", "名称不合法", 422);
-    expect(biz.code).toBe("INVALID_NAME");
-    expect(biz.statusCode).toBe(422);
-
-    const auth = new AuthError("过期", 401);
-    expect(auth.statusCode).toBe(401);
-  });
-
-  it("NetworkError 无状态码时 statusCode 为 undefined,并保留 cause", () => {
+  it("网络层失败:无 statusCode,保留 cause", () => {
     const cause = new Error("underlying");
-    const net = new NetworkError("失败", undefined, { cause });
-    expect(net.statusCode).toBeUndefined();
-    expect(net.cause).toBe(cause);
+    const err = new ApiError({ code: NETWORK_ERROR_CODE, message: "失败", cause });
+    expect(err.statusCode).toBeUndefined();
+    expect(err.cause).toBe(cause);
+  });
+});
+
+describe("isApiError", () => {
+  it("对 ApiError 实例返回 true", () => {
+    expect(isApiError(new ApiError({ code: "X", message: "y" }))).toBe(true);
   });
 
-  it("name 为具体子类名,便于日志识别", () => {
-    expect(new NetworkError("x").name).toBe("NetworkError");
-    expect(new AuthError("x", 401).name).toBe("AuthError");
-    expect(new BusinessError("c", "x", 400).name).toBe("BusinessError");
+  it("鸭子判定:name + string code 也认(跨打包边界 instanceof 失效时兜底)", () => {
+    expect(isApiError({ name: "ApiError", code: "X", message: "y" })).toBe(true);
+  });
+
+  it("对普通 Error / 非错误值返回 false", () => {
+    expect(isApiError(new Error("plain"))).toBe(false);
+    expect(isApiError({ code: "X" })).toBe(false); // name 不符
+    expect(isApiError(null)).toBe(false);
+    expect(isApiError("oops")).toBe(false);
   });
 });

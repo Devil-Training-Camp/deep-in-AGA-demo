@@ -1,21 +1,25 @@
 /**
  * API 客户端错误类型(architecture-design.md §四:错误响应统一 { error: { code, message } })。
  *
- * 按来源分三类,让调用方能据此分流处理(prompt:区分网络错误 / 业务错误 / 鉴权错误):
- * - NetworkError:请求没拿到 HTTP 响应(断网、超时、DNS 等),或非 2xx 但无法解析出业务错误体
- * - AuthError:鉴权失败(401/403),调用方通常需引导重新登录
- * - BusinessError:服务端按契约返回的 { error: { code, message } } 业务错误
+ * 全系统只有一个具体错误类 {@link ApiError}:把 HTTP 层的一切失败(业务错误、鉴权、网络、
+ * 非契约的网关错误)统一归一化成它。**调用层只处理 `code` 字段,不看 HTTP 状态码**——
+ * status 只用于拦截器内部分流(如 401 触发跳转),不作为调用方的分支依据。
  *
- * 三者都继承 ApiError,调用方可用 `instanceof ApiError` 兜底,或按子类精确分流。
+ * `code` 的取值是服务端契约里的字符串错误码(schema `ApiError.error.code`),
+ * 如 VALIDATION_ERROR / UNAUTHORIZED / LLM_TIMEOUT。schema 里是开放字符串而非闭合枚举,
+ * 故这里也用 string,不硬造一份会与后端漂移的联合类型。
  */
 
-/** 服务端错误响应体契约(architecture-design.md:248)。 */
-export interface ErrorEnvelope {
-  error: {
-    code: string;
-    message: string;
-  };
-}
+import type { ApiErrorResponse } from "@kb/shared";
+
+/**
+ * 服务端错误响应体契约,取自单一事实源(schema.yaml → @kb/shared)。
+ * 形如 `{ error: { code, message, details? } }`。
+ */
+export type ErrorEnvelope = ApiErrorResponse;
+
+/** 拦截器内部无 HTTP 响应时用的兜底错误码(网络层失败、请求处理异常)。 */
+export const NETWORK_ERROR_CODE = "NETWORK_ERROR";
 
 /** 运行时判定一个未知值是否符合 { error: { code, message } } 契约。 */
 export function isErrorEnvelope(value: unknown): value is ErrorEnvelope {
@@ -26,43 +30,48 @@ export function isErrorEnvelope(value: unknown): value is ErrorEnvelope {
   return typeof code === "string" && typeof message === "string";
 }
 
-/** 所有 API 错误的基类。statusCode 在无 HTTP 响应(网络层失败)时为 undefined。 */
-export abstract class ApiError extends Error {
-  abstract readonly kind: "network" | "auth" | "business";
-  readonly statusCode?: number;
-
-  constructor(message: string, statusCode?: number, options?: { cause?: unknown }) {
-    super(message, options);
-    this.name = new.target.name;
-    this.statusCode = statusCode;
-  }
+/** 构造 ApiError 的入参。statusCode 供拦截器内部分流,不暴露给调用方作分支依据。 */
+export interface ApiErrorInit {
+  code: string;
+  message: string;
+  /** HTTP 状态码;网络层失败(无响应)时为 undefined。 */
+  statusCode?: number;
+  /** 服务端返回的结构化补充(如逐字段校验错误)。 */
+  details?: Record<string, unknown>;
+  cause?: unknown;
 }
 
-/** 网络层失败:没有 HTTP 响应,或响应体不符合业务错误契约。可安全重试(仅限幂等请求)。 */
-export class NetworkError extends ApiError {
-  readonly kind = "network" as const;
-
-  constructor(message: string, statusCode?: number, options?: { cause?: unknown }) {
-    super(message, statusCode, options);
-  }
-}
-
-/** 鉴权失败(401 / 403)。不重试——重试不会让 token 变有效,只会放大失败。 */
-export class AuthError extends ApiError {
-  readonly kind = "auth" as const;
-
-  constructor(message: string, statusCode: number, options?: { cause?: unknown }) {
-    super(message, statusCode, options);
-  }
-}
-
-/** 业务错误:服务端按契约返回的 { error: { code, message } }。code 供调用方分支处理。 */
-export class BusinessError extends ApiError {
-  readonly kind = "business" as const;
+/**
+ * 统一的 API 错误。调用层通过 `error.code` 分支处理,不碰 statusCode。
+ * 用 `isApiError(err)` 收窄,而不是 `instanceof`——跨包/跨打包边界 instanceof 可能失效。
+ */
+export class ApiError extends Error {
+  /** 机器可判读的错误码(服务端契约)。调用层唯一应依赖的分支字段。 */
   readonly code: string;
+  /** HTTP 状态码;网络层失败时 undefined。仅拦截器内部使用,调用层不应依赖。 */
+  readonly statusCode?: number;
+  /** 可选的结构化补充。 */
+  readonly details?: Record<string, unknown>;
 
-  constructor(code: string, message: string, statusCode: number, options?: { cause?: unknown }) {
-    super(message, statusCode, options);
-    this.code = code;
+  constructor(init: ApiErrorInit) {
+    super(init.message, init.cause !== undefined ? { cause: init.cause } : undefined);
+    this.name = "ApiError";
+    this.code = init.code;
+    this.statusCode = init.statusCode;
+    this.details = init.details;
   }
+}
+
+/**
+ * type guard:判断一个未知错误是否为 {@link ApiError}。调用侧据此拿到 `code` 分支处理。
+ * 用鸭子判定(name + code)而非 `instanceof`,避免多份 axios/打包实例导致原型链不一致时误判。
+ */
+export function isApiError(value: unknown): value is ApiError {
+  return (
+    value instanceof ApiError ||
+    (typeof value === "object" &&
+      value !== null &&
+      (value as { name?: unknown }).name === "ApiError" &&
+      typeof (value as { code?: unknown }).code === "string")
+  );
 }
