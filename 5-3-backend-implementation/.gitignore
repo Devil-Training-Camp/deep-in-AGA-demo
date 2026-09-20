@@ -1,0 +1,23 @@
+# dependencies
+node_modules
+
+# build output
+**/dist
+**/.next
+*.tsbuildinfo
+
+# next generated
+**/next-env.d.ts
+
+# 密钥只走服务端环境变量,绝不入库(CLAUDE.md 密钥保护;仓库 deny 列表禁读 .env)
+.env
+.env.*
+!.env.example
+
+# 上传文件本地临时暂存目录(architecture-design.md:文件字节暂存在服务端本地临时目录)
+tmp/
+uploads/
+
+# misc
+.DS_Store
+*.log

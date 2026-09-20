@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "rag-implementation": {
+      "source": "davila7/claude-code-templates",
+      "sourceType": "github",
+      "skillPath": "cli-tool/components/skills/ai-research/rag-implementation/SKILL.md",
+      "computedHash": "35a5805f00bdba6fd87b53105fd75beef6dc129fcf02b6d724e024b6fa49c12f"
+    }
+  }
+}
