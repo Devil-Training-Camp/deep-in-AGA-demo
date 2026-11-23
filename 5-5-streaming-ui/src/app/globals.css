@@ -1,0 +1,228 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * 智能知识问答系统 — 设计 token（Tailwind v4，CSS-first）
+ *
+ * 组织方式：
+ * - :root / .dark 下用具体色值定义原始 token（我们自有的一套：primary 靛蓝、
+ *   accent 青、surface/foreground/border、success/warning/error/info）。
+ * - @theme inline 把 token 暴露成 Tailwind 工具类（bg-primary、text-foreground-muted、
+ *   p-md、text-sm 等），并映射 shadcn 组件依赖的语义名（--background/--foreground/
+ *   --primary/--border/--card…）到我们的 token，使 shadcn 组件自动继承本主题。
+ * - 明暗切换：在 <html> 上加/去 `dark` class。
+ *
+ * 正文/文字对比度均按 WCAG AA(≥4.5:1) 校验；改色值后重新校验并同步 doc/design-tokens.md。
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ── 我们自有的原始 token（亮色）────────────────────────── */
+  /* 主色 · 靛蓝 */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-active: #3730a3;
+  --color-primary-subtle: #eef2ff;
+  --color-primary-foreground: #ffffff;
+  /* 辅助色 · 青 */
+  --color-accent: #0e7490;
+  --color-accent-subtle: #ecfeff;
+  --color-accent-foreground: #ffffff;
+  /* 表面与背景 */
+  --color-background: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f3f6;
+  /* 边框 */
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  /* 文字 */
+  --color-foreground: #334155;
+  --color-foreground-muted: #64748b;
+  --color-foreground-subtle: #94a3b8;
+  --color-foreground-heading: #1e293b;
+  /* 语义色 */
+  --color-success: #15803d;
+  --color-success-subtle: #f0fdf4;
+  --color-success-foreground: #ffffff;
+  --color-warning: #b45309;
+  --color-warning-subtle: #fffbeb;
+  --color-warning-foreground: #ffffff;
+  --color-error: #dc2626;
+  --color-error-subtle: #fef2f2;
+  --color-error-foreground: #ffffff;
+  --color-info: #0284c7;
+  --color-info-subtle: #f0f9ff;
+  --color-info-foreground: #ffffff;
+
+  /* ── shadcn 语义名 → 映射到我们的 token（亮色）──────────── */
+  --radius: 0.625rem;
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-foreground);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-foreground);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-surface-muted);
+  --secondary-foreground: var(--color-foreground-heading);
+  --muted: var(--color-surface-muted);
+  --muted-foreground: var(--color-foreground-muted);
+  --accent: var(--color-primary-subtle);
+  --accent-foreground: var(--color-primary-active);
+  --destructive: var(--color-error);
+  --border: var(--color-border);
+  --input: var(--color-border-strong);
+  --ring: var(--color-primary);
+}
+
+.dark {
+  /* ── 我们自有的原始 token（暗色，提亮降饱和、非纯黑/纯白）── */
+  /* 主色 · 靛蓝 */
+  --color-primary: #5b5fe0; /* 按钮表面，配白字 5.05:1 过 AA */
+  --color-primary-hover: #6366f1;
+  --color-primary-active: #818cf8; /* 作 primary 文本/边框时用 */
+  --color-primary-subtle: #272a42;
+  --color-primary-foreground: #ffffff;
+  /* 辅助色 · 青 */
+  --color-accent: #22d3ee;
+  --color-accent-subtle: #162e36;
+  --color-accent-foreground: #0f1115;
+  /* 表面与背景 · 带冷灰的深色 */
+  --color-background: #161a20;
+  --color-surface: #1c212b;
+  --color-surface-muted: #252b37;
+  /* 边框 */
+  --color-border: #333a47;
+  --color-border-strong: #475060;
+  /* 文字 · 柔和浅色 */
+  --color-foreground: #cbd5e1;
+  --color-foreground-muted: #94a3b8;
+  --color-foreground-subtle: #64748b;
+  --color-foreground-heading: #e2e8f0;
+  /* 语义色 · 提亮降饱和 */
+  --color-success: #4ade80;
+  --color-success-subtle: #142b1e;
+  --color-success-foreground: #0f1115;
+  --color-warning: #fbbf24;
+  --color-warning-subtle: #33270c;
+  --color-warning-foreground: #0f1115;
+  --color-error: #f87171;
+  --color-error-subtle: #331818;
+  --color-error-foreground: #0f1115;
+  --color-info: #38bdf8;
+  --color-info-subtle: #0f2836;
+  --color-info-foreground: #0f1115;
+
+  /* ── shadcn 语义名 → 映射到我们的 token（暗色）──────────── */
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-foreground);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-foreground);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-surface-muted);
+  --secondary-foreground: var(--color-foreground-heading);
+  --muted: var(--color-surface-muted);
+  --muted-foreground: var(--color-foreground-muted);
+  --accent: var(--color-primary-subtle);
+  --accent-foreground: var(--color-primary-active);
+  --destructive: var(--color-error);
+  --border: var(--color-border);
+  --input: var(--color-border-strong);
+  --ring: var(--color-primary-active);
+}
+
+/*
+ * @theme inline：把上面的 CSS 变量注册成 Tailwind 工具类。
+ * inline 表示引用现有变量而非再复制一份值——这样 .dark 切换时工具类自动跟随。
+ */
+@theme inline {
+  /* 我们自有的颜色工具类：bg-primary / text-foreground-muted / border-border-strong … */
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-active: var(--color-primary-active);
+  --color-primary-subtle: var(--color-primary-subtle);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-subtle: var(--color-accent-subtle);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-foreground: var(--color-foreground);
+  --color-foreground-muted: var(--color-foreground-muted);
+  --color-foreground-subtle: var(--color-foreground-subtle);
+  --color-foreground-heading: var(--color-foreground-heading);
+  --color-success: var(--color-success);
+  --color-success-subtle: var(--color-success-subtle);
+  --color-success-foreground: var(--color-success-foreground);
+  --color-warning: var(--color-warning);
+  --color-warning-subtle: var(--color-warning-subtle);
+  --color-warning-foreground: var(--color-warning-foreground);
+  --color-error: var(--color-error);
+  --color-error-subtle: var(--color-error-subtle);
+  --color-error-foreground: var(--color-error-foreground);
+  --color-info: var(--color-info);
+  --color-info-subtle: var(--color-info-subtle);
+  --color-info-foreground: var(--color-info-foreground);
+
+  /* shadcn 语义名工具类（bg-card / text-muted-foreground / bg-destructive …）*/
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* 间距 token（基础单位 4px）。高密度界面下 xs/sm 用于列表行内间距。 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* 字体 token */
+  --font-sans: var(--font-geist, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif);
+  --font-mono: SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* 字号档位 [字号/行高]。正文默认 14px(sm)，长对话正文 16px(md)。 */
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+  --text-md: 16px;
+  --text-md--line-height: 24px;
+  --text-lg: 18px;
+  --text-lg--line-height: 28px;
+  --text-xl: 24px;
+  --text-xl--line-height: 32px;
+  --text-2xl: 30px;
+  --text-2xl--line-height: 38px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}

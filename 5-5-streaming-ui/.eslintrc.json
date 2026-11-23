@@ -1,0 +1,80 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "project": [
+      "./packages/shared/tsconfig.json",
+      "./packages/db/tsconfig.json",
+      "./packages/web/tsconfig.json"
+    ]
+  },
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": [
+          "./packages/shared/tsconfig.json",
+          "./packages/db/tsconfig.json",
+          "./packages/web/tsconfig.json"
+        ]
+      }
+    }
+  },
+  "rules": {
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-misused-promises": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "import/order": [
+      "warn",
+      { "newlines-between": "always", "alphabetize": { "order": "asc" } }
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/SELECT\\s+\\*/i]",
+        "message": "禁用 SELECT *(CLAUDE.md 数据脱敏):显式列出字段,永不查出 password_hash;messages.content 也不得随手带出。"
+      },
+      {
+        "selector": "TemplateElement[value.raw=/SELECT\\s+\\*/i]",
+        "message": "禁用 SELECT *(CLAUDE.md 数据脱敏):显式列出字段,永不查出 password_hash;messages.content 也不得随手带出。"
+      },
+      {
+        "selector": "Identifier[name=/^NEXT_PUBLIC_/]",
+        "message": "禁止 NEXT_PUBLIC_ 前缀承载密钥(CLAUDE.md 密钥保护):JWT 密钥、云 API 密钥、PG 连接串绝不进前端 bundle。仅非敏感常量可用此前缀。"
+      },
+      {
+        "selector": "MemberExpression[object.object.name='process'][object.property.name='env'][property.name=/^NEXT_PUBLIC_/]",
+        "message": "禁止 NEXT_PUBLIC_ 前缀承载密钥(CLAUDE.md 密钥保护):敏感值只走服务端环境变量,绝不进前端 bundle。"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["packages/web/**/*.{ts,tsx}"],
+      "plugins": ["@next/next", "react-hooks"],
+      "extends": ["plugin:@next/next/recommended"],
+      "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "node_modules",
+    "**/.next/**",
+    "**/dist/**",
+    "**/*.tsbuildinfo",
+    "**/next-env.d.ts",
+    "**/migrations/*.sql",
+    "packages/web/src/components/ui/**"
+  ]
+}
